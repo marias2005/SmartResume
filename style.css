@@ -1,0 +1,13 @@
+/* Optional custom tweaks */
+body {
+  transition: background-color 0.3s ease;
+}
+
+textarea::-webkit-scrollbar {
+  width: 6px;
+}
+
+textarea::-webkit-scrollbar-thumb {
+  background-color: #90cdf4;
+  border-radius: 3px;
+}

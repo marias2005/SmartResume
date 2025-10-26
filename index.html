@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Smart Resume Builder</title>
+  <link rel="stylesheet" href="style.css" />
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <style>
+    /* Smooth transition for the entire theme */
+    * {
+      transition: background-color 0.5s ease, color 0.4s ease, border-color 0.4s ease;
+    }
+
+    body {
+      background-color: #f3f4f6;
+      color: #1f2937;
+    }
+
+    .max-w-4xl {
+      transition: background-color 0.5s ease, box-shadow 0.4s ease;
+    }
+
+    /* 🌗 Template Gallery */
+    .template-grid {
+      display: flex;
+      gap: 1rem;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+    .template-item {
+      border: 2px solid #ccc;
+      border-radius: 10px;
+      padding: 8px;
+      width: 180px;
+      text-align: center;
+      cursor: pointer;
+      transition: 0.3s;
+      background-color: #fafafa;
+    }
+    .template-item:hover {
+      border-color: #007bff;
+      transform: scale(1.05);
+    }
+    .template-item img {
+      width: 100%;
+      border-radius: 8px;
+    }
+
+    /* 🌙 DARK MODE */
+    body.dark {
+      background-color: #0a0f1e;
+      color: #e5e7eb;
+    }
+
+    body.dark .max-w-4xl {
+      background-color: #111827;
+      color: #f3f4f6;
+      box-shadow: 0 0 30px rgba(59,130,246,0.3);
+    }
+
+    body.dark textarea,
+    body.dark select,
+    body.dark #suggestionBox {
+      background-color: #1e293b;
+      border-color: #334155;
+      color: #f3f4f6;
+    }
+
+    body.dark button {
+      border: none;
+    }
+
+    body.dark #generateBtn {
+      background-color: #2563eb;
+    }
+
+    body.dark #clearBtn {
+      background-color: #374151;
+      color: #f9fafb;
+    }
+
+    body.dark #downloadBtn {
+      background-color: #16a34a;
+    }
+
+    /* Smooth hover glow in dark mode */
+    body.dark button:hover {
+      filter: brightness(1.2);
+      transition: filter 0.3s ease;
+    }
+    @keyframes spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+.spin {
+  animation: spin 1.5s linear infinite;
+  display: inline-block;
+}
+
+#aiIcon {
+  transition: transform 0.3s ease;
+}
+  </style>
+</head>
+
+<body class="bg-gray-100 font-sans transition-colors duration-700">
+  <div class="max-w-4xl mx-auto mt-10 bg-white rounded-xl shadow-lg p-8 transition-colors duration-700">
+    <div class="flex justify-between items-center mb-6">
+      <h1 class="text-3xl font-bold text-blue-700">💼 Smart Resume Builder</h1>
+      <!-- 🌗 Toggle Button -->
+      <button id="themeToggle" class="px-4 py-2 rounded-lg bg-gray-200 hover:bg-gray-300 text-gray-800 transition-all duration-500">
+        🌙 Dark Mode
+      </button>
+    </div>
+
+    <!-- Input area -->
+    <div>
+      <label class="block text-gray-700 font-semibold mb-2">Enter your resume text:</label>
+      <textarea id="resumeInput" class="w-full p-3 border border-gray-300 rounded-lg h-40 focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Paste or type your resume section here..."></textarea>
+    </div>
+
+    <!-- Dropdowns -->
+    <div class="flex gap-4 mt-4">
+      <select id="toneSelect" class="border border-gray-300 rounded-lg p-2">
+        <option value="Professional">Professional</option>
+        <option value="Creative">Creative</option>
+        <option value="Technical">Technical</option>
+        <option value="Minimal">Minimal</option>
+      </select>
+
+      <select id="focusSelect" class="border border-gray-300 rounded-lg p-2">
+        <option value="Summary">Summary</option>
+        <option value="Experience">Experience</option>
+        <option value="Skills">Skills</option>
+      </select>
+    </div>
+
+    <!-- AI Suggestions -->
+    <div class="mt-8">
+      <h2 class="text-xl font-semibold text-gray-800 mb-2 flex items-center gap-2">
+  <span id="aiIcon" class="inline-block">💡</span>
+  <span>AI Suggestions:</span>
+</h2>
+      <div id="suggestionBox" class="bg-gray-50 border border-gray-300 rounded-lg p-4 min-h-[100px]">
+        No suggestions yet.
+      </div>
+    </div>
+
+    <!-- Template gallery -->
+    <div id="templateGallery" class="mt-8">
+      <h3 class="text-lg font-semibold mb-3">🧩 Select a Template</h3>
+      <div id="templateList" class="template-grid">
+        <div class="template-item">
+          <img src="templates/template1.jpg" alt="Template 1">
+          <p class="mt-2 font-medium text-gray-700">Modern</p>
+        </div>
+        <div class="template-item">
+          <img src="templates/template2.webp" alt="Template 2">
+          <p class="mt-2 font-medium text-gray-700">Minimalist</p>
+        </div>
+        <div class="template-item">
+          <img src="templates/template3.png" alt="Template 3">
+          <p class="mt-2 font-medium text-gray-700">Creative</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Buttons -->
+    <div class="flex justify-center gap-4 mt-8">
+      <button id="generateBtn" class="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 transition">
+        Get AI Suggestions
+      </button>
+      <button id="clearBtn" class="bg-gray-300 px-6 py-2 rounded-lg hover:bg-gray-400 transition">
+        Clear
+      </button>
+      <button id="downloadBtn" class="bg-green-600 text-white px-6 py-2 rounded-lg hover:bg-green-700 transition">
+        Download PDF
+      </button>
+    </div>
+  </div>
+
+  <!-- Scripts -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+  <script src="script.js"></script>
+
+  <script>
+    // 🌗 Theme toggle with smooth fade
+    const themeToggle = document.getElementById("themeToggle");
+    themeToggle.addEventListener("click", () => {
+      document.body.classList.toggle("dark");
+      const isDark = document.body.classList.contains("dark");
+      themeToggle.textContent = isDark ? "☀️ Light Mode" : "🌙 Dark Mode";
+
+      // small fade overlay for smoother switch
+      const overlay = document.createElement("div");
+      overlay.style.position = "fixed";
+      overlay.style.top = 0;
+      overlay.style.left = 0;
+      overlay.style.width = "100%";
+      overlay.style.height = "100%";
+      overlay.style.background = isDark ? "#0b1120" : "#f3f4f6";
+      overlay.style.opacity = "0";
+      overlay.style.transition = "opacity 0.6s ease";
+      overlay.style.zIndex = "50";
+      document.body.appendChild(overlay);
+      requestAnimationFrame(() => (overlay.style.opacity = "1"));
+      setTimeout(() => overlay.remove(), 400);
+    });
+  </script>
+</body>
+</html>
